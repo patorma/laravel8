@@ -14,6 +14,12 @@ class Course extends Model
         // pertenece a 
         return $this->belongsTo(User::class);
     }
+    
+
+    public function posts(){
+        // tiene muchos posts el curso
+        return $this->hasMany(Post::class);
+    }
 
     //crear atributo virtual
     public function getExcerptAttribute()
@@ -22,5 +28,12 @@ class Course extends Model
         // y no pasarte de 800 caracteres
         return substr($this->description,0,80) . "...";
         
+    }
+
+    public function similar(){
+        // busca de acuerdo al id de la categoria el curso que esta visualizando en ese momento con relacion con el usuario
+        return $this->where('category_id',$this->category_id)->with('user')
+        ->take(2)
+        ->get();
     }
 }
